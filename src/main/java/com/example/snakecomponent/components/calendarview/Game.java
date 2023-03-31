@@ -287,7 +287,6 @@ public class Game {
     }
 
     public void start() {
-        System.out.println("The game has started!");
         Arrays.stream(this.calendarEntries).forEach(row -> Arrays.stream(row).forEach(element -> element.unhideText()));
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
             @Override
@@ -300,7 +299,6 @@ public class Game {
                 if (snake.isCollidingFood(foodSystem.getCurrentActiveFoodPosition())) {
                     foodSystem.eat();
                 }
-                System.out.println("Drawing");
                 snake.draw(calendarEntries);
                 foodSystem.draw();
             }
@@ -311,7 +309,6 @@ public class Game {
     }
 
     public void endGame() {
-        System.out.println("The game has ended!");
         this.extraLabel.setText("The game is over. Press [space] to try again");
         this.timeline.stop();
     }
