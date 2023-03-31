@@ -14,7 +14,7 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         CalendarView calendarView = new CalendarView();
 
-        Scene scene = new Scene(calendarView, 320, 240);
+        Scene scene = new Scene(calendarView, 500, 500);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
