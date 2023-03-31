@@ -1,6 +1,6 @@
 package com.example.snakecomponent;
 
-import com.example.snakecomponent.components.calendarview.CalendarView;
+import com.example.snakecomponent.components.calendarview.SnakeCalendar;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,9 +12,9 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        CalendarView calendarView = new CalendarView();
+        SnakeCalendar snakeCalendar = new SnakeCalendar();
 
-        Scene scene = new Scene(calendarView, 500, 500);
+        Scene scene = new Scene(snakeCalendar, 500, 500);
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();

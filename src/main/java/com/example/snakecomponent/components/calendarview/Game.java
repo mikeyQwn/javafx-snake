@@ -113,7 +113,7 @@ class HeadSegment implements Segment {
 
     public void draw(CalendarEntry[][] calendarEntries) {
         CalendarEntry correspondingElement = calendarEntries[this.position.getY()][this.position.getX()];
-        correspondingElement.setBackgroundColor("rgb(0, 255, 0)");
+        correspondingElement.setBackgroundColor("rgb(184, 115, 51)");
     }
 
     public Position getPosition() {
@@ -162,7 +162,7 @@ class FoodItem {
     }
 
     public void draw() {
-        this.entry.setBackgroundColor("rgb(255, 0, 0);");
+        this.entry.setBackgroundColor("rgb(128, 128, 0)");
     }
 
     public void hide() {
