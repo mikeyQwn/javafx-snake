@@ -212,6 +212,7 @@ class FoodSystem {
 
 class Snake {
     private Direction direction;
+    private Direction previousDirection;
     private ArrayList<Segment> segments;
     private HeadSegment head;
 
@@ -240,6 +241,7 @@ class Snake {
             this.segments.get(this.segments.size() - i).setPosition(this.segments.get(this.segments.size() - i - 1).getPosition());
         }
         this.head.update(this.direction);
+        this.previousDirection = this.direction;
     }
 
     public boolean isHeadOutOfBounds(Position bottomLeftCorner) {
@@ -254,8 +256,12 @@ class Snake {
         this.direction = direction;
     }
 
-    public Direction getDirection() {
-        return this.direction;
+    public Direction getPreviousDirection() {
+        return this.previousDirection;
+    }
+
+    public void setPreviousDirection(Direction direction) {
+        this.previousDirection = direction;
     }
 
 }
@@ -307,7 +313,8 @@ public class Game {
     }
 
     public void handleInput(Direction direction) {
-        if (!direction.isOpposite(this.snake.getDirection()))
-            this.snake.setDirection(direction);
+        if (direction.isOpposite(this.snake.getPreviousDirection()))
+            return;
+        this.snake.setDirection(direction);
     }
 }
