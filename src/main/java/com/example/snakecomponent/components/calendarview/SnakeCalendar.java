@@ -14,13 +14,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class CalendarView extends GridPane {
+public class SnakeCalendar extends GridPane {
     final int CALENDAR_ENTRY_WIDTH = 7;
     final int CALENDAR_ENTRY_HEIGHT = 6;
     private Game game;
-    private CalendarEntry[][] calendarEntries;
-    private Label extraLabel;
-    public CalendarView() {
+    private final CalendarEntry[][] calendarEntries;
+    private final Label extraLabel;
+
+    public SnakeCalendar() {
         this.setPadding(new Insets(5, 0, 5, 0));
         this.setVgap(4);
         this.setHgap(4);
@@ -58,8 +59,7 @@ public class CalendarView extends GridPane {
         getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode() == KeyCode.SPACE)
-                    startGame();
+                if (keyEvent.getCode() == KeyCode.SPACE) startGame();
                 if (game == null) return;
                 switch (keyEvent.getCode()) {
                     case W:
@@ -89,7 +89,7 @@ public class CalendarView extends GridPane {
         return label;
     }
 
-    private Label createExtraLabel () {
+    private Label createExtraLabel() {
         Label label = new Label("Press [space] to play");
         label.setAlignment(Pos.CENTER);
         label.setMaxWidth(Float.POSITIVE_INFINITY);
@@ -99,7 +99,7 @@ public class CalendarView extends GridPane {
     private GridPane getGridPane(int borderWidth) {
         CalendarData data = new CalendarData();
         GridPane pane = new GridPane();
-        pane.setStyle("-fx-background-color: black;" + "-fx-border-width: "+ borderWidth+ ";" + "-fx-border-color: black");
+        pane.setStyle("-fx-background-color: black;" + "-fx-border-width: " + borderWidth + ";" + "-fx-border-color: black");
         pane.setHgap(borderWidth);
         pane.setVgap(borderWidth);
         for (int i = 0; i < this.CALENDAR_ENTRY_WIDTH; ++i) {
@@ -122,14 +122,6 @@ class CalendarEntry extends Label {
     private String colorProperty;
     private String text;
 
-    private int getRandomColorValue() {
-        return (int) Math.floor(Math.random() * 255);
-    }
-
-    private String getRandomColor() {
-        return String.format("rgb(%d, %d, %d)", this.getRandomColorValue(), this.getRandomColorValue(), this.getRandomColorValue());
-    }
-
     public CalendarEntry(String labelText) {
         this.setMinSize(50, 50);
         this.setAlignment(Pos.CENTER);
@@ -137,6 +129,14 @@ class CalendarEntry extends Label {
         this.style();
         this.setText(labelText);
         this.text = labelText;
+    }
+
+    private int getRandomColorValue() {
+        return (int) Math.floor(Math.random() * 255);
+    }
+
+    private String getRandomColor() {
+        return String.format("rgb(%d, %d, %d)", this.getRandomColorValue(), this.getRandomColorValue(), this.getRandomColorValue());
     }
 
     public void setBackgroundColor(String colorProperty) {
@@ -147,6 +147,7 @@ class CalendarEntry extends Label {
     public void clearBackgroundStyle() {
         this.setBackgroundColor("rgb(255, 255, 255);");
     }
+
     private void style() {
         this.setStyle(this.styleProperties + this.colorProperty);
     }
@@ -160,30 +161,36 @@ class CalendarEntry extends Label {
         this.setText(this.text);
     }
 }
+
 class CalendarData {
-    String[] labels;
-    int[][] dateNumbers;
     final int DATE_NUMBERS_WIDTH = 7;
     final int DATE_NUMBERS_HEIGHT = 6;
+    String[] labels;
+    int[][] dateNumbers;
 
     public CalendarData() {
         this.labels = generateLabels();
         this.dateNumbers = generateDateNumbers();
     }
 
-    public String getLabel(int index) { return this.labels[index]; }
+    public String getLabel(int index) {
+        return this.labels[index];
+    }
 
-    public int getDateNumber(int i, int j) { return this.dateNumbers[j][i]; }
+    public int getDateNumber(int i, int j) {
+        return this.dateNumbers[j][i];
+    }
 
-    public String getDateString(int i, int j) { return this.dateNumbers[j][i] == 0 ? "" : Integer.toString(this.dateNumbers[j][i]);}
+    public String getDateString(int i, int j) {
+        return this.dateNumbers[j][i] == 0 ? "" : Integer.toString(this.dateNumbers[j][i]);
+    }
 
     private String[] generateLabels() {
-        return new String[] {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        return new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
     }
 
     private int[][] generateDateNumbers() {
-        int[][] calendarData =
-                new int[this.DATE_NUMBERS_HEIGHT][this.DATE_NUMBERS_WIDTH];
+        int[][] calendarData = new int[this.DATE_NUMBERS_HEIGHT][this.DATE_NUMBERS_WIDTH];
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -192,10 +199,8 @@ class CalendarData {
         int dayOfWeekIndex = dayOfWeekNumber == 1 ? 0 : dayOfWeekNumber - 2;
         for (int i = 0; i < this.DATE_NUMBERS_WIDTH; ++i) {
             for (int j = 0; j < this.DATE_NUMBERS_HEIGHT; ++j) {
-                int number =
-                        i + j * this.DATE_NUMBERS_WIDTH - dayOfWeekIndex + 1;
-                if (number < 0 || number > max_number)
-                    continue;
+                int number = i + j * this.DATE_NUMBERS_WIDTH - dayOfWeekIndex + 1;
+                if (number < 0 || number > max_number) continue;
 
                 calendarData[j][i] = number;
             }
@@ -206,7 +211,6 @@ class CalendarData {
 
     public void print() {
         System.out.println(Arrays.toString(this.labels));
-        Arrays.stream(dateNumbers)
-                .forEach(row -> System.out.println(Arrays.toString(row)));
+        Arrays.stream(dateNumbers).forEach(row -> System.out.println(Arrays.toString(row)));
     }
 }

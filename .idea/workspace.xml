@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2f2f157e-3897-4968-ae8a-97f1d5c429dd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/snakecomponent/components/calendarview/CalendarView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/snakecomponent/components/calendarview/CalendarView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/snakecomponent/components/calendarview/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/snakecomponent/components/calendarview/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/snakecomponent/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/snakecomponent/HelloApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/snakecomponent/components/calendarview/CalendarView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/snakecomponent/components/calendarview/SnakeCalendar.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
