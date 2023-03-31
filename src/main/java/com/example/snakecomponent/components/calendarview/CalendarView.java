@@ -1,21 +1,41 @@
 package com.example.snakecomponent.components.calendarview;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
 
 import java.util.Arrays;
 import java.util.Calendar;
 
-public class CalendarView extends Pane {
-
+public class CalendarView extends GridPane {
     public CalendarView() {
-        this.getChildren().add(this.getGridPane());
+        this.setPadding(new Insets(5, 0, 5, 0));
+        this.setVgap(4);
+        this.setHgap(4);
+        Label titleLabel = this.createTitleLabel();
+        Label extraLabel = this.createExtraLabel();
+        this.add(titleLabel, 0, 1);
+        this.add(this.getGridPane(), 0, 2);
+        this.add(extraLabel, 0, 3);
     }
 
+    private Label createTitleLabel() {
+        Label label = new Label("Snake calendar");
+        label.setAlignment(Pos.CENTER);
+        label.setMaxWidth(Float.POSITIVE_INFINITY);
+        return label;
+    }
 
+    private Label createExtraLabel () {
+        Label label = new Label("Press [space] to play");
+        label.setAlignment(Pos.CENTER);
+        label.setMaxWidth(Float.POSITIVE_INFINITY);
+        return label;
+    }
 
     private GridPane getGridPane() {
         CalendarData data = new CalendarData();
