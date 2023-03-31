@@ -118,6 +118,7 @@ class CalendarEntry extends Label {
 
     final String styleProperties = "";
     private String colorProperty;
+    private String text;
 
     private int getRandomColorValue() {
         return (int) Math.floor(Math.random() * 255);
@@ -133,6 +134,7 @@ class CalendarEntry extends Label {
         this.colorProperty = "-fx-background-color: rgb(255, 255, 255);";
         this.style();
         this.setText(labelText);
+        this.text = labelText;
     }
 
     public void setBackgroundColor(String colorProperty) {
@@ -145,6 +147,15 @@ class CalendarEntry extends Label {
     }
     private void style() {
         this.setStyle(this.styleProperties + this.colorProperty);
+    }
+
+    public void hideText() {
+        this.text = this.getText();
+        this.setText("");
+    }
+
+    public void unhideText() {
+        this.setText(this.text);
     }
 }
 class CalendarData {
@@ -169,7 +180,6 @@ class CalendarData {
     }
 
     private int[][] generateDateNumbers() {
-
         int[][] calendarData =
                 new int[this.DATE_NUMBERS_HEIGHT][this.DATE_NUMBERS_WIDTH];
 
@@ -178,7 +188,6 @@ class CalendarData {
         int max_number = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         int dayOfWeekNumber = cal.get(Calendar.DAY_OF_WEEK);
         int dayOfWeekIndex = dayOfWeekNumber == 1 ? 0 : dayOfWeekNumber - 2;
-        System.out.println(dayOfWeekIndex);
         for (int i = 0; i < this.DATE_NUMBERS_WIDTH; ++i) {
             for (int j = 0; j < this.DATE_NUMBERS_HEIGHT; ++j) {
                 int number =
