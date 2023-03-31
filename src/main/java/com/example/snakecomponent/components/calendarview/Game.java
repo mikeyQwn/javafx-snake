@@ -4,7 +4,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.skin.TextInputControlSkin;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -19,13 +18,13 @@ enum Direction {
     public boolean isOpposite(Direction other) {
         switch (this) {
             case UP:
-                return other == this.DOWN;
+                return other == DOWN;
             case DOWN:
-                return other == this.UP;
+                return other == UP;
             case LEFT:
-                return other == this.RIGHT;
+                return other == RIGHT;
             case RIGHT:
-                return other == this.LEFT;
+                return other == LEFT;
             default:
                 return false;
         }
@@ -33,13 +32,26 @@ enum Direction {
 
     public Direction getOpposite() {
         switch (this) {
-            case UP: return this.DOWN;
-            case DOWN: return this.UP;
-            case LEFT: return this.RIGHT;
-            case RIGHT: return this.LEFT;
-            default: return this.UP;
+            case UP:
+                return DOWN;
+            case DOWN:
+                return UP;
+            case LEFT:
+                return RIGHT;
+            case RIGHT:
+                return LEFT;
+            default:
+                return UP;
         }
     }
+}
+
+interface Segment {
+    void draw(CalendarEntry[][] calendarEntries);
+
+    Position getPosition();
+
+    void setPosition(Position position);
 }
 
 class Position {
@@ -59,7 +71,7 @@ class Position {
         return y;
     }
 
-    public void move (Direction direction) {
+    public void move(Direction direction) {
         switch (direction) {
             case UP:
                 this.y -= 1;
@@ -72,7 +84,6 @@ class Position {
                 return;
             case RIGHT:
                 this.x += 1;
-                return;
         }
 
     }
@@ -80,16 +91,6 @@ class Position {
     public Position clone() {
         return new Position(this.x, this.y);
     }
-}
-
-interface Segment {
-    public void update(Direction direction);
-
-    public void draw(CalendarEntry[][] calendarEntries);
-
-    public Position getPosition();
-
-    public void setPosition(Position position);
 }
 
 class HeadSegment implements Segment {
@@ -117,18 +118,18 @@ class HeadSegment implements Segment {
     public void setPosition(Position position) {
         this.position = position;
     }
+
+    public boolean isOutOfBounds(Position rightDownCorner) {
+        return this.position.getX() < 0 || this.position.getX() > rightDownCorner.getX() || this.position.getY() < 0 || this.position.getY() > rightDownCorner.getY();
+    }
 }
 
 class BodySegment implements Segment {
     private Position position;
+
     BodySegment(Position position) {
         this.position = position;
     }
-
-    public void update(Direction direction) {
-        this.position.move(direction);
-    }
-
 
     public void draw(CalendarEntry[][] calendarEntries) {
         CalendarEntry correspondingElement = calendarEntries[this.position.getY()][this.position.getX()];
@@ -147,13 +148,15 @@ class BodySegment implements Segment {
 }
 
 class Snake {
-    Direction direction;
-    ArrayList<Segment> segments;
+    private Direction direction;
+    private ArrayList<Segment> segments;
+    private HeadSegment head;
 
     public Snake() {
         this.direction = Direction.UP;
         this.segments = new ArrayList<>();
-        Segment head = new HeadSegment();
+        HeadSegment head = new HeadSegment();
+        this.head = head;
         this.segments.add(head);
         Position bodySegmentPosition = head.getPosition().clone();
         bodySegmentPosition.move(this.direction.getOpposite());
@@ -169,30 +172,49 @@ class Snake {
         for (int i = 1; i < this.segments.size(); ++i) {
             this.segments.get(this.segments.size() - i).setPosition(this.segments.get(this.segments.size() - i - 1).getPosition());
         }
-        this.segments.get(0).update(this.direction);
+        this.head.update(this.direction);
+    }
+
+    public boolean isHeadOutOfBounds(Position bottomLeftCorner) {
+        return this.head.isOutOfBounds(bottomLeftCorner);
     }
 }
 
 public class Game {
-    CalendarEntry[][] calendarEntries;
-    private Snake snake;
+    private CalendarEntry[][] calendarEntries;
+    private final Snake snake;
+    private Position bottomRightCorner;
+    private Timeline timeline;
 
     public Game(CalendarEntry[][] calendarEntries) {
         this.calendarEntries = calendarEntries;
         this.snake = new Snake();
         this.snake.update();
         this.snake.draw(calendarEntries);
+        this.bottomRightCorner = new Position(calendarEntries[0].length, calendarEntries.length);
     }
+
     public void start() {
         System.out.println("The game has started!");
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 snake.update();
+                if (snake.isHeadOutOfBounds(bottomRightCorner)) {
+                    endGame();
+                    return;
+                }
+                System.out.println("Drawing");
                 snake.draw(calendarEntries);
             }
         }));
+        this.timeline = timeline;
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+    }
+
+    public void endGame() {
+        System.out.println("The game has ended!");
+        this.timeline.stop();
     }
 }
