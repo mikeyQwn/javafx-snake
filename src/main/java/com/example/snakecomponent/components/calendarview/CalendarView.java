@@ -37,22 +37,45 @@ public class CalendarView extends GridPane {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                addSpacePressHandler();
+                addKeypressHandler();
             }
         }, 1000);
     }
 
     public void startGame() {
+        if (this.game != null) this.endGame();
         this.game = new Game(this.calendarEntries);
         this.game.start();
     }
 
-    private void addSpacePressHandler() {
+    private void endGame() {
+        this.game.endGame();
+    }
+
+    private void addKeypressHandler() {
         getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode() != KeyCode.SPACE) return;
-                startGame();
+                if (keyEvent.getCode() == KeyCode.SPACE)
+                    startGame();
+                if (game == null) return;
+                switch (keyEvent.getCode()) {
+                    case W:
+                    case UP:
+                        game.handleInput(Direction.UP);
+                        break;
+                    case S:
+                    case DOWN:
+                        game.handleInput(Direction.DOWN);
+                        break;
+                    case A:
+                    case LEFT:
+                        game.handleInput(Direction.LEFT);
+                        break;
+                    case D:
+                    case RIGHT:
+                        game.handleInput(Direction.RIGHT);
+                }
             }
         });
     }

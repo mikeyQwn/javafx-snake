@@ -161,6 +161,10 @@ class Snake {
         Position bodySegmentPosition = head.getPosition().clone();
         bodySegmentPosition.move(this.direction.getOpposite());
         this.segments.add(new BodySegment(bodySegmentPosition));
+        Position bodySegment2Position = bodySegmentPosition.clone();
+        bodySegment2Position.move(Direction.LEFT);
+        segments.add(new BodySegment(bodySegment2Position));
+
     }
 
     public void draw(CalendarEntry[][] calendarEntries) {
@@ -177,6 +181,10 @@ class Snake {
 
     public boolean isHeadOutOfBounds(Position bottomLeftCorner) {
         return this.head.isOutOfBounds(bottomLeftCorner);
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }
 
@@ -216,5 +224,9 @@ public class Game {
     public void endGame() {
         System.out.println("The game has ended!");
         this.timeline.stop();
+    }
+
+    public void handleInput(Direction direction) {
+        this.snake.setDirection(direction);
     }
 }
