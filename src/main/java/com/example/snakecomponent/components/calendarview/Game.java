@@ -63,7 +63,7 @@ class Position {
 interface Segment {
     public void update();
 
-    public void draw();
+    public void draw(CalendarEntry[][] calendarEntries);
 }
 
 class HeadSegment implements Segment {
@@ -77,7 +77,9 @@ class HeadSegment implements Segment {
     }
 
 
-    public void draw() {
+    public void draw(CalendarEntry[][] calendarEntries) {
+        CalendarEntry correspondingElement = calendarEntries[this.position.getY()][this.position.getX()];
+        correspondingElement.setBackgroundColor("rgb(0, 255, 0)");
     }
 }
 
@@ -91,7 +93,10 @@ class BodySegment implements Segment {
     }
 
 
-    public void draw() {
+    public void draw(CalendarEntry[][] calendarEntries) {
+        CalendarEntry correspondingElement = calendarEntries[this.position.getY()][this.position.getX()];
+        correspondingElement.setBackgroundColor("rgb(210,105,30)");
+
     }
 
 }
@@ -104,11 +109,21 @@ class Snake {
         this.direction = Direction.UP;
         this.segments = new ArrayList<>();
         this.segments.add(new HeadSegment());
+        this.segments.add(new BodySegment(new Position(3, 3)));
+    }
+
+    public void draw(CalendarEntry[][] calendarEntries) {
+        this.segments.forEach(segment -> segment.draw(calendarEntries));
     }
 }
 
 public class Game {
-    public Game() {
+    CalendarEntry[][] calendarEntries;
+    private Snake snake;
+    public Game(CalendarEntry[][] calendarEntries) {
+        this.calendarEntries = calendarEntries;
+        this.snake = new Snake();
+        this.snake.draw(calendarEntries);
     }
     public void start() {
         System.out.println("The game has started!");

@@ -8,17 +8,18 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class CalendarView extends GridPane {
-    Game game;
+    final int CALENDAR_ENTRY_WIDTH = 7;
+    final int CALENDAR_ENTRY_HEIGHT = 6;
+    private Game game;
+    private CalendarEntry[][] calendarEntries;
     public CalendarView() {
         this.setPadding(new Insets(5, 0, 5, 0));
         this.setVgap(4);
         this.setHgap(4);
+        this.calendarEntries = new CalendarEntry[CALENDAR_ENTRY_HEIGHT][CALENDAR_ENTRY_WIDTH];
         Label titleLabel = this.createTitleLabel();
         GridPane gridPane = this.getGridPane();
         Label extraLabel = this.createExtraLabel();
@@ -42,7 +43,7 @@ public class CalendarView extends GridPane {
     }
 
     public void startGame() {
-        this.game = new Game();
+        this.game = new Game(this.calendarEntries);
         this.game.start();
     }
 
@@ -76,9 +77,11 @@ public class CalendarView extends GridPane {
         pane.setStyle("-fx-background-color: black;" + "-fx-border-width: 20;" + "-fx-border-color: black");
         pane.setHgap(20);
         pane.setVgap(20);
-        for (int i = 0; i < 7; ++i) {
-            for (int j = 0; j < 6; ++j) {
-                pane.add(new CalendarEntry(data.getDateString(i, j)), i, j);
+        for (int i = 0; i < this.CALENDAR_ENTRY_WIDTH; ++i) {
+            for (int j = 0; j < this.CALENDAR_ENTRY_HEIGHT; ++j) {
+                CalendarEntry entry = new CalendarEntry(data.getDateString(i, j));
+                this.calendarEntries[j][i] = entry;
+                pane.add(entry, i, j);
             }
         }
         return pane;
@@ -89,7 +92,9 @@ public class CalendarView extends GridPane {
 
 
 class CalendarEntry extends Label {
-    final String blackBackgroundStyle = "-fx-background-color: #f3f3f3; -fx-border-width: 2; -fx-border-radius: 5;";
+
+    final String styleProperties = "";
+    private String colorProperty;
 
     private int getRandomColorValue() {
         return (int) Math.floor(Math.random() * 255);
@@ -102,11 +107,17 @@ class CalendarEntry extends Label {
     public CalendarEntry(String labelText) {
         this.setMinSize(50, 50);
         this.setAlignment(Pos.CENTER);
-        this.setStyle("-fx-background-color: rgb(255, 255, 255);"
-//                + "-fx-border-width: 2;"
-//                + "-fx-border-color: black"
-        );
+        this.colorProperty = "-fx-background-color: rgb(255, 255, 255);";
+        this.style();
         this.setText(labelText);
+    }
+
+    public void setBackgroundColor(String colorProperty) {
+        this.colorProperty = "-fx-background-color: " + colorProperty;
+        this.style();
+    }
+    private void style() {
+        this.setStyle(this.styleProperties + this.colorProperty);
     }
 }
 class CalendarData {
