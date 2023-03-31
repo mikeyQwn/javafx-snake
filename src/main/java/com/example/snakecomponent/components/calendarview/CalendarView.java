@@ -8,7 +8,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class CalendarView extends GridPane {
     final int CALENDAR_ENTRY_WIDTH = 7;
@@ -21,25 +25,20 @@ public class CalendarView extends GridPane {
         this.setHgap(4);
         this.calendarEntries = new CalendarEntry[CALENDAR_ENTRY_HEIGHT][CALENDAR_ENTRY_WIDTH];
         Label titleLabel = this.createTitleLabel();
-        GridPane gridPane = this.getGridPane();
+        GridPane gridPane = this.getGridPane(4);
         Label extraLabel = this.createExtraLabel();
-        this.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                System.out.println("Hey");
-            }
-        });
         this.requestFocus();
         this.add(titleLabel, 0, 1);
         this.add(gridPane, 0, 2);
         this.add(extraLabel, 0, 3);
         Timer timer = new Timer();
+        final int sceneLoadDelayMs = 1000;
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 addKeypressHandler();
             }
-        }, 1000);
+        }, sceneLoadDelayMs);
     }
 
     public void startGame() {
@@ -94,12 +93,12 @@ public class CalendarView extends GridPane {
         return label;
     }
 
-    private GridPane getGridPane() {
+    private GridPane getGridPane(int borderWidth) {
         CalendarData data = new CalendarData();
         GridPane pane = new GridPane();
-        pane.setStyle("-fx-background-color: black;" + "-fx-border-width: 20;" + "-fx-border-color: black");
-        pane.setHgap(20);
-        pane.setVgap(20);
+        pane.setStyle("-fx-background-color: black;" + "-fx-border-width: "+ borderWidth+ ";" + "-fx-border-color: black");
+        pane.setHgap(borderWidth);
+        pane.setVgap(borderWidth);
         for (int i = 0; i < this.CALENDAR_ENTRY_WIDTH; ++i) {
             for (int j = 0; j < this.CALENDAR_ENTRY_HEIGHT; ++j) {
                 CalendarEntry entry = new CalendarEntry(data.getDateString(i, j));
