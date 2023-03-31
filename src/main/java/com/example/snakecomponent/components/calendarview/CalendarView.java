@@ -1,26 +1,67 @@
 package com.example.snakecomponent.components.calendarview;
 
+import com.example.snakecomponent.HelloApplication;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CalendarView extends GridPane {
+    Game game;
     public CalendarView() {
         this.setPadding(new Insets(5, 0, 5, 0));
         this.setVgap(4);
         this.setHgap(4);
         Label titleLabel = this.createTitleLabel();
+        GridPane gridPane = this.getGridPane();
         Label extraLabel = this.createExtraLabel();
+        this.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                System.out.println("Hey");
+            }
+        });
+        this.requestFocus();
         this.add(titleLabel, 0, 1);
-        this.add(this.getGridPane(), 0, 2);
+        this.add(gridPane, 0, 2);
         this.add(extraLabel, 0, 3);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                addSpacePressHandler();
+            }
+        }, 1000);
+    }
+
+    public void startGame() {
+        this.game = new Game();
+        this.game.start();
+    }
+
+    private void addSpacePressHandler() {
+        getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() != KeyCode.SPACE) return;
+                startGame();
+            }
+        });
     }
 
     private Label createTitleLabel() {
