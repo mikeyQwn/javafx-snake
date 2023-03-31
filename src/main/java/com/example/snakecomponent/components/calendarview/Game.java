@@ -280,7 +280,7 @@ public class Game {
         this.snake.draw(calendarEntries);
         this.foodSystem = new FoodSystem(calendarEntries);
         this.foodSystem.draw();
-        this.bottomRightCorner = new Position(calendarEntries[0].length, calendarEntries.length);
+        this.bottomRightCorner = new Position(calendarEntries[0].length - 1, calendarEntries.length - 1);
     }
 
     public void start() {
