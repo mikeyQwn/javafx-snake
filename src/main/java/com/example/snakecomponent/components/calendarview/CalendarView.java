@@ -113,8 +113,12 @@ class CalendarEntry extends Label {
     }
 
     public void setBackgroundColor(String colorProperty) {
-        this.colorProperty = "-fx-background-color: " + colorProperty;
+        this.colorProperty = "-fx-background-color: " + colorProperty + ";";
         this.style();
+    }
+
+    public void clearBackgroundStyle() {
+        this.setBackgroundColor("rgb(255, 255, 255);");
     }
     private void style() {
         this.setStyle(this.styleProperties + this.colorProperty);
