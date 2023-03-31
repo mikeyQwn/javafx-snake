@@ -17,9 +17,9 @@ import java.util.TimerTask;
 public class SnakeCalendar extends GridPane {
     final int CALENDAR_ENTRY_WIDTH = 7;
     final int CALENDAR_ENTRY_HEIGHT = 6;
-    private Game game;
     private final CalendarEntry[][] calendarEntries;
     private final Label extraLabel;
+    private Game game;
 
     public SnakeCalendar() {
         this.setPadding(new Insets(5, 0, 5, 0));
@@ -29,7 +29,6 @@ public class SnakeCalendar extends GridPane {
         Label titleLabel = this.createTitleLabel();
         GridPane gridPane = this.getGridPane(4);
         this.extraLabel = this.createExtraLabel();
-        this.requestFocus();
         this.add(titleLabel, 0, 1);
         this.add(gridPane, 0, 2);
         this.add(this.extraLabel, 0, 3);
@@ -103,10 +102,13 @@ public class SnakeCalendar extends GridPane {
         pane.setHgap(borderWidth);
         pane.setVgap(borderWidth);
         for (int i = 0; i < this.CALENDAR_ENTRY_WIDTH; ++i) {
+            pane.add(new CalendarEntry(data.getLabel(i)), i, 0);
+        }
+        for (int i = 0; i < this.CALENDAR_ENTRY_WIDTH; ++i) {
             for (int j = 0; j < this.CALENDAR_ENTRY_HEIGHT; ++j) {
                 CalendarEntry entry = new CalendarEntry(data.getDateString(i, j));
                 this.calendarEntries[j][i] = entry;
-                pane.add(entry, i, j);
+                pane.add(entry, i, j + 1);
             }
         }
         return pane;
@@ -201,7 +203,6 @@ class CalendarData {
             for (int j = 0; j < this.DATE_NUMBERS_HEIGHT; ++j) {
                 int number = i + j * this.DATE_NUMBERS_WIDTH - dayOfWeekIndex + 1;
                 if (number < 0 || number > max_number) continue;
-
                 calendarData[j][i] = number;
             }
         }
