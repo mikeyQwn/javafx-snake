@@ -183,7 +183,7 @@ class FoodSystem {
         for (int i = 0; i < calendarEntries[0].length; ++i) {
             for (int j = 0; j < calendarEntries.length; ++j) {
                 if (!calendarEntries[j][i].getText().equals(""))
-                availableSources.add(new FoodItem(calendarEntries[j][i], new Position(i, j)));
+                    availableSources.add(new FoodItem(calendarEntries[j][i], new Position(i, j)));
             }
         }
         this.availableSources = availableSources;
@@ -254,6 +254,10 @@ class Snake {
         this.direction = direction;
     }
 
+    public Direction getDirection() {
+        return this.direction;
+    }
+
 }
 
 public class Game {
@@ -275,6 +279,7 @@ public class Game {
 
     public void start() {
         System.out.println("The game has started!");
+        Arrays.stream(this.calendarEntries).forEach(row -> Arrays.stream(row).forEach(element -> element.unhideText()));
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -302,6 +307,7 @@ public class Game {
     }
 
     public void handleInput(Direction direction) {
-        this.snake.setDirection(direction);
+        if (!direction.isOpposite(this.snake.getDirection()))
+            this.snake.setDirection(direction);
     }
 }
