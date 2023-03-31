@@ -19,6 +19,7 @@ public class CalendarView extends GridPane {
     final int CALENDAR_ENTRY_HEIGHT = 6;
     private Game game;
     private CalendarEntry[][] calendarEntries;
+    private Label extraLabel;
     public CalendarView() {
         this.setPadding(new Insets(5, 0, 5, 0));
         this.setVgap(4);
@@ -26,11 +27,11 @@ public class CalendarView extends GridPane {
         this.calendarEntries = new CalendarEntry[CALENDAR_ENTRY_HEIGHT][CALENDAR_ENTRY_WIDTH];
         Label titleLabel = this.createTitleLabel();
         GridPane gridPane = this.getGridPane(4);
-        Label extraLabel = this.createExtraLabel();
+        this.extraLabel = this.createExtraLabel();
         this.requestFocus();
         this.add(titleLabel, 0, 1);
         this.add(gridPane, 0, 2);
-        this.add(extraLabel, 0, 3);
+        this.add(this.extraLabel, 0, 3);
         Timer timer = new Timer();
         final int sceneLoadDelayMs = 1000;
         timer.schedule(new TimerTask() {
@@ -43,12 +44,14 @@ public class CalendarView extends GridPane {
 
     public void startGame() {
         if (this.game != null) this.endGame();
-        this.game = new Game(this.calendarEntries);
+        this.game = new Game(this.calendarEntries, this.extraLabel);
         this.game.start();
+        this.extraLabel.setText("Game is running. Use wasd or arrows to move");
     }
 
     private void endGame() {
         this.game.endGame();
+        this.extraLabel.setText("The game is over. Press [space] to retry");
     }
 
     private void addKeypressHandler() {

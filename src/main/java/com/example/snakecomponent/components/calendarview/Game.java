@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Label;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -272,8 +273,9 @@ public class Game {
     private FoodSystem foodSystem;
     private Position bottomRightCorner;
     private Timeline timeline;
+    private Label extraLabel;
 
-    public Game(CalendarEntry[][] calendarEntries) {
+    public Game(CalendarEntry[][] calendarEntries, Label extraLabel) {
         this.calendarEntries = calendarEntries;
         this.snake = new Snake();
         this.snake.update();
@@ -281,6 +283,7 @@ public class Game {
         this.foodSystem = new FoodSystem(calendarEntries);
         this.foodSystem.draw();
         this.bottomRightCorner = new Position(calendarEntries[0].length - 1, calendarEntries.length - 1);
+        this.extraLabel = extraLabel;
     }
 
     public void start() {
@@ -309,6 +312,7 @@ public class Game {
 
     public void endGame() {
         System.out.println("The game has ended!");
+        this.extraLabel.setText("The game is over. Press [space] to try again");
         this.timeline.stop();
     }
 
